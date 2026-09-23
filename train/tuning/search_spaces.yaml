@@ -1,0 +1,175 @@
+version: tuning_search_spaces_v1
+
+models:
+  logistic:
+    c:
+      type: float
+      low: 0.001
+      high: 100.0
+      log: true
+    tol:
+      type: categorical
+      choices: [0.0001, 0.0005, 0.001]
+    min_frequency:
+      type: categorical
+      choices: [5, 10, 20, 50]
+    fixed:
+      solver: saga
+      max_iter: 800
+      class_weight: balanced
+
+  catboost:
+    iterations:
+      type: int
+      low: 300
+      high: 1500
+      step: 100
+    depth:
+      type: int
+      low: 4
+      high: 10
+    learning_rate:
+      type: float
+      low: 0.01
+      high: 0.2
+      log: true
+    l2_leaf_reg:
+      type: float
+      low: 1.0
+      high: 20.0
+      log: true
+    random_strength:
+      type: float
+      low: 0.0
+      high: 2.0
+    fixed:
+      early_stopping_rounds: 60
+      eval_metric: PRAUC
+      auto_class_weights: Balanced
+      thread_count: 6
+
+  lightgbm:
+    n_estimators:
+      type: int
+      low: 300
+      high: 1500
+      step: 100
+    num_leaves:
+      type: int
+      low: 15
+      high: 127
+    max_depth:
+      type: categorical
+      choices: [-1, 4, 6, 8, 10]
+    learning_rate:
+      type: float
+      low: 0.01
+      high: 0.2
+      log: true
+    min_child_samples:
+      type: int
+      low: 10
+      high: 100
+      step: 5
+    subsample:
+      type: float
+      low: 0.6
+      high: 1.0
+    colsample_bytree:
+      type: float
+      low: 0.6
+      high: 1.0
+    reg_lambda:
+      type: float
+      low: 0.001
+      high: 20.0
+      log: true
+    tree_min_frequency:
+      type: categorical
+      choices: [5, 10, 20, 50]
+    fixed:
+      early_stopping_rounds: 60
+      class_weight: balanced
+      thread_count: 6
+
+  xgboost:
+    n_estimators:
+      type: int
+      low: 300
+      high: 1500
+      step: 100
+    max_depth:
+      type: int
+      low: 3
+      high: 10
+    learning_rate:
+      type: float
+      low: 0.01
+      high: 0.2
+      log: true
+    min_child_weight:
+      type: float
+      low: 0.1
+      high: 20.0
+      log: true
+    subsample:
+      type: float
+      low: 0.6
+      high: 1.0
+    colsample_bytree:
+      type: float
+      low: 0.6
+      high: 1.0
+    reg_lambda:
+      type: float
+      low: 0.001
+      high: 20.0
+      log: true
+    tree_min_frequency:
+      type: categorical
+      choices: [5, 10, 20, 50]
+    fixed:
+      early_stopping_rounds: 60
+      thread_count: 6
+
+  lstm:
+    hidden_size:
+      type: categorical
+      choices: [16, 32, 64]
+    num_layers:
+      type: categorical
+      choices: [1, 2]
+    bidirectional:
+      type: categorical
+      choices: [false, true]
+    embedding_max_dim:
+      type: categorical
+      choices: [8, 16, 32]
+    mlp_hidden_size:
+      type: categorical
+      choices: [32, 64, 128]
+    dropout:
+      type: float
+      low: 0.1
+      high: 0.5
+    batch_size:
+      type: categorical
+      choices: [256, 512, 1024]
+    learning_rate:
+      type: float
+      low: 0.0001
+      high: 0.003
+      log: true
+    weight_decay:
+      type: float
+      low: 0.000001
+      high: 0.01
+      log: true
+    gradient_clip_norm:
+      type: categorical
+      choices: [0.5, 1.0, 2.0]
+    fixed:
+      max_epochs: 30
+      early_stopping_patience: 5
+      early_stopping_min_delta: 0.0001
+      num_workers: 0

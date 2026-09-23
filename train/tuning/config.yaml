@@ -1,0 +1,69 @@
+version: tuning_v1
+seed: 42
+
+registry:
+  source: resources/tuning_experiment_registry.csv
+  source_sha256: 6ec6e89d3909db8ef768c465f3a383271ecde55bae2c481555c1be06045668e3
+  expected_rows: 38
+  expected_tiers:
+    A1_required_core: 15
+    A2_internal_enhanced: 12
+    B_external_sensitivity: 11
+
+inputs:
+  feature_manifest: output/features_v1/feature_engineering_manifest.json
+  baseline_config: baseline_modeling/config.yaml
+  lstm_config: lstm_baseline/config.yaml
+  search_spaces: tuning/search_spaces.yaml
+
+output:
+  root: output/tuning_v1
+
+optimization:
+  direction: maximize
+  objective: validation_recall_at_weighted_f2_threshold
+  sampler: tpe
+  default_trials:
+    logistic: 30
+    catboost: 40
+    lightgbm: 40
+    xgboost: 40
+    lstm: 20
+  selection:
+    f2_relative_floor: 0.95
+    average_precision_relative_floor: 0.90
+    order: [recall, f2, average_precision]
+
+evaluation:
+  threshold_metric: weighted_f2
+  threshold_beta: 2.0
+  top_k_fractions: [0.05, 0.10, 0.20]
+  allowed_splits: [train, validation]
+  test_data_used: false
+
+external:
+  country_climate:
+    cohort: all
+    config: country_climate_effect/config.yaml
+  route_climate:
+    cohort: high
+    dataset_manifest: output/route_climate_effect_v1/datasets/route_climate_dataset_manifest.json
+    config: route_climate_effect/config.yaml
+  domestic_weather:
+    minimum_coverage_pct: 70.0
+    tabular_window_days: 30
+    weather_root: output/external_variables_v1/weather_pilot
+    weather_base_fields:
+      - temp_mean
+      - hghst_artmp_mean
+      - lowst_artmp_mean
+      - hum_mean
+      - wind_mean
+      - max_wind_mean
+      - rn_sum
+      - srqty_mean
+
+smoke:
+  config_id: CFG-014
+  n_trials: 1
+  quick_cap_per_split: 2000
