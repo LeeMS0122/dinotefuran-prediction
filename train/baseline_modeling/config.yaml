@@ -1,0 +1,98 @@
+version: baseline_v2
+random_seed: 42
+
+selection:
+  metric: average_precision
+  reporting_primary_metric: recall
+  threshold_metric: f2
+  threshold_beta: 2.0
+  tuning_candidates_per_target: 2
+
+evaluation:
+  top_k_fractions: [0.05, 0.10, 0.20]
+  bootstrap_repeats: 300
+  bootstrap_confidence: 0.95
+
+logistic_regression:
+  solver: saga
+  c: 1.0
+  max_iter: 400
+  tol: 0.001
+  min_frequency: 10
+  class_weight: balanced
+
+catboost:
+  iterations: 500
+  depth: 7
+  learning_rate: 0.08
+  l2_leaf_reg: 5.0
+  random_strength: 1.0
+  early_stopping_rounds: 60
+  eval_metric: PRAUC
+  auto_class_weights: Balanced
+  thread_count: 6
+
+tree_encoding:
+  min_frequency: 10
+
+lightgbm:
+  n_estimators: 500
+  num_leaves: 31
+  max_depth: -1
+  learning_rate: 0.05
+  min_child_samples: 20
+  subsample: 0.8
+  colsample_bytree: 0.8
+  reg_lambda: 1.0
+  early_stopping_rounds: 60
+  class_weight: balanced
+  thread_count: 6
+
+xgboost:
+  n_estimators: 500
+  max_depth: 6
+  learning_rate: 0.05
+  min_child_weight: 1.0
+  subsample: 0.8
+  colsample_bytree: 0.8
+  reg_lambda: 1.0
+  early_stopping_rounds: 60
+  thread_count: 6
+
+candidates:
+  - name: prior_baseline
+    model_type: prior
+    feature_set: core
+  - name: logistic_core
+    model_type: logistic
+    feature_set: core
+  - name: logistic_extended
+    model_type: logistic
+    feature_set: extended
+  - name: catboost_core
+    model_type: catboost
+    feature_set: core
+  - name: catboost_extended
+    model_type: catboost
+    feature_set: extended
+  - name: catboost_conditional
+    model_type: catboost
+    feature_set: conditional
+  - name: lightgbm_core
+    model_type: lightgbm
+    feature_set: core
+  - name: lightgbm_extended
+    model_type: lightgbm
+    feature_set: extended
+  - name: lightgbm_conditional
+    model_type: lightgbm
+    feature_set: conditional
+  - name: xgboost_core
+    model_type: xgboost
+    feature_set: core
+  - name: xgboost_extended
+    model_type: xgboost
+    feature_set: extended
+  - name: xgboost_conditional
+    model_type: xgboost
+    feature_set: conditional
