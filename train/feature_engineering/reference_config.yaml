@@ -1,0 +1,230 @@
+version: 1.0
+
+food_group_mapping:
+  min_support: 3
+  min_purity: 0.80
+  unclassified_label: 미분류
+  l2_aliases:
+    유지 종실류: 유지종실류
+    기타식물: 기타식물류
+    기타콩류: 기타두류
+    과일류: 과실류
+    차: 다류
+
+province_aliases:
+  서울: 서울특별시
+  부산: 부산광역시
+  대구: 대구광역시
+  인천: 인천광역시
+  광주: 광주광역시
+  대전: 대전광역시
+  울산: 울산광역시
+  세종: 세종특별자치시
+  경기: 경기도
+  강원: 강원특별자치도
+  강원도: 강원특별자치도
+  충북: 충청북도
+  충남: 충청남도
+  전북: 전북특별자치도
+  전라북도: 전북특별자치도
+  전남: 전라남도
+  경북: 경상북도
+  경남: 경상남도
+  제주: 제주특별자치도
+
+province_macro_region:
+  서울특별시: 수도권
+  인천광역시: 수도권
+  경기도: 수도권
+  강원특별자치도: 강원권
+  대전광역시: 충청권
+  세종특별자치시: 충청권
+  충청북도: 충청권
+  충청남도: 충청권
+  광주광역시: 호남권
+  전북특별자치도: 호남권
+  전라남도: 호남권
+  부산광역시: 영남권
+  대구광역시: 영남권
+  울산광역시: 영남권
+  경상북도: 영남권
+  경상남도: 영남권
+  제주특별자치도: 제주권
+
+country_name_to_iso2:
+  대한민국: KR
+  한국: KR
+  국내산: KR
+  중국: CN
+  일본: JP
+  대만: TW
+  홍콩: HK
+  베트남: VN
+  태국: TH
+  필리핀: PH
+  인도네시아: ID
+  말레이시아: MY
+  싱가포르: SG
+  미얀마: MM
+  캄보디아: KH
+  인도: IN
+  스리랑카: LK
+  파키스탄: PK
+  미국: US
+  캐나다: CA
+  멕시코: MX
+  과테말라: GT
+  브라질: BR
+  페루: PE
+  칠레: CL
+  콜롬비아: CO
+  에콰도르: EC
+  아르헨티나: AR
+  호주: AU
+  뉴질랜드: NZ
+  독일: DE
+  영국: GB
+  프랑스: FR
+  이탈리아: IT
+  벨기에: BE
+  네덜란드: NL
+  스페인: ES
+  포르투갈: PT
+  폴란드: PL
+  우크라이나: UA
+  러시아: RU
+  튀르키예: TR
+  터키: TR
+  에티오피아: ET
+  이집트: EG
+  남아프리카 공화국: ZA
+  남아프리카공화국: ZA
+  케냐: KE
+
+iso2_region:
+  KR: 동아시아
+  CN: 동아시아
+  JP: 동아시아
+  TW: 동아시아
+  HK: 동아시아
+  MN: 동아시아
+  VN: 동남아시아
+  TH: 동남아시아
+  PH: 동남아시아
+  ID: 동남아시아
+  MY: 동남아시아
+  SG: 동남아시아
+  MM: 동남아시아
+  KH: 동남아시아
+  LA: 동남아시아
+  BN: 동남아시아
+  IN: 남아시아
+  LK: 남아시아
+  PK: 남아시아
+  BD: 남아시아
+  NP: 남아시아
+  US: 북아메리카
+  CA: 북아메리카
+  MX: 북아메리카
+  GT: 중앙아메리카·카리브
+  CR: 중앙아메리카·카리브
+  PA: 중앙아메리카·카리브
+  HN: 중앙아메리카·카리브
+  NI: 중앙아메리카·카리브
+  SV: 중앙아메리카·카리브
+  DO: 중앙아메리카·카리브
+  JM: 중앙아메리카·카리브
+  BR: 남아메리카
+  PE: 남아메리카
+  CL: 남아메리카
+  CO: 남아메리카
+  EC: 남아메리카
+  AR: 남아메리카
+  BO: 남아메리카
+  PY: 남아메리카
+  UY: 남아메리카
+  VE: 남아메리카
+  AU: 오세아니아
+  NZ: 오세아니아
+  PG: 오세아니아
+  FJ: 오세아니아
+  DE: 유럽
+  GB: 유럽
+  FR: 유럽
+  IT: 유럽
+  BE: 유럽
+  NL: 유럽
+  ES: 유럽
+  PT: 유럽
+  PL: 유럽
+  UA: 유럽
+  RU: 유럽
+  AT: 유럽
+  CH: 유럽
+  GR: 유럽
+  CZ: 유럽
+  HU: 유럽
+  RO: 유럽
+  BG: 유럽
+  DK: 유럽
+  SE: 유럽
+  NO: 유럽
+  FI: 유럽
+  IE: 유럽
+  TR: 서아시아
+  AE: 서아시아
+  IL: 서아시아
+  SA: 서아시아
+  IR: 서아시아
+  KZ: 중앙아시아
+  UZ: 중앙아시아
+  ET: 아프리카
+  EG: 아프리카
+  ZA: 아프리카
+  KE: 아프리카
+  TZ: 아프리카
+  UG: 아프리카
+  GH: 아프리카
+  CI: 아프리카
+  NG: 아프리카
+  MA: 아프리카
+
+feature_sets:
+  core_categorical:
+    - food_group_l1_std
+    - event_month
+    - event_quarter
+    - event_season
+    - event_half
+  core_numeric:
+    - event_month_sin
+    - event_month_cos
+    - event_dayofyear_sin
+    - event_dayofyear_cos
+    - event_week_sin
+    - event_week_cos
+    - product_is_composite_v1
+  extended_categorical:
+    - food_group_l2_std
+    - origin_iso2_std
+    - origin_region_std
+    - supply_route_v1
+    - domestic_province_std
+    - domestic_macro_region
+  conditional_categorical:
+    - product_name_key_v1
+    - product_code
+    - work_type
+    - collection_stage
+    - cultivation_method_1
+  diagnostic_only:
+    - facility_type
+    - food_group_mapping_source
+    - origin_country_mapping_source
+    - domestic_location_basis
+    - weather_join_ready_v1
+    - event_year
+    - event_date
+    - source_system
+
+
