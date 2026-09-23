@@ -1,0 +1,29 @@
+version: lstm_sequences_v1
+window_days: 30
+sequence_key: sequence_food_group_l2
+sequence_order: oldest_to_most_recent
+channels:
+  - name: inspection_count
+    dtype: int32
+    model_transform: log1p
+  - name: active_mask
+    dtype: uint8
+    model_transform: none
+minimum_active_days_reference: 3
+include_splits: [historical_excluded, train, validation, test, oot_monitor]
+storage_policy:
+  keep_all_labeled_rows: true
+  invalid_key_fill: zero_sequence
+  missing_history_fill: zero_sequence
+  store_explicit_masks: true
+leakage_policy:
+  interval: "[event_date-window, event_date)"
+  exclude_same_day: true
+  exclude_future: true
+  forbidden_inputs:
+    - result_value
+    - judge_result
+    - standard_mrl
+    - current_target
+    - past_target_without_result_available_time
+
