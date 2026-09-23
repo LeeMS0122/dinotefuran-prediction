@@ -1,0 +1,97 @@
+version: 1.0
+prediction_time: "검사결과가 확정되기 전(검사의뢰·접수·수거 시점)"
+
+targets:
+  occurrence:
+    column: label_occurrence_v1
+    description: "잔류 존재(검출)"
+  screening:
+    column: label_screening_10pct_v1
+    description: "MRL 대비 10% 초과 관심농도"
+  noncompliance:
+    column: label_noncompliance_v1
+    description: "기준 부적합"
+
+split_policy:
+  group_key: duplicate_group_id
+  group_anchor: max_event_date
+  periods:
+    historical_excluded:
+      max_year: 2014
+      purpose: "희소 과거자료 보존 및 민감도 분석"
+    train:
+      min_year: 2015
+      max_year: 2024
+      purpose: "모델 학습"
+    validation:
+      min_year: 2025
+      max_year: 2025
+      purpose: "모델·임계값 선택"
+    test:
+      min_date: 2026-01-01
+      max_date: 2026-06-30
+      purpose: "최종 성능평가"
+    oot_monitor:
+      min_date: 2026-07-01
+      purpose: "2026년 7월 이후 부분기간 모니터링; 최종 성능값 산정에서 제외"
+
+feature_sets:
+  core_categorical:
+    - product_code
+    - product_name_std
+    - product_group_raw
+    - origin_country_code
+    - origin_country_name
+    - import_country_code
+    - production_country_code
+    - collection_province
+    - collection_city
+    - cultivation_province
+    - cultivation_city
+    - work_type
+    - collection_stage
+    - cultivation_method_1
+    - cultivation_method_2
+    - facility_type
+    - survey_area
+    - survey_volume
+    - export_type
+    - event_month
+    - event_quarter
+    - event_season
+  core_numeric:
+    - event_month_sin
+    - event_month_cos
+  diagnostic_only:
+    - source_system
+    - event_year
+    - event_date
+    - row_calendar_split
+    - group_anchor_date
+    - group_anchor_year
+    - group_size
+    - group_sample_weight
+    - group_target_conflict
+  identifiers:
+    - record_id
+    - duplicate_group_id
+  forbidden_patterns:
+    - label_
+    - result_
+    - judge_
+    - mrl_
+    - noncompliance_
+    - screening_
+    - detected_
+    - canonical_
+
+training_rows:
+  primary: "split in [train, validation, test]"
+  monitoring: "split == oot_monitor"
+  sensitivity_historical: "split == historical_excluded"
+  sensitivity_no_conflict: "group_target_conflict == 0"
+  sample_weight: group_sample_weight
+
+
+
+

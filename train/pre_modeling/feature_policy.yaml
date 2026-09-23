@@ -1,0 +1,101 @@
+version: dinotefuran_feature_policy_v1_2026-09-14
+prediction_time: 검사 결과 확인 전 의뢰·접수·수거 단계
+
+targets:
+  occurrence: label_occurrence_v1
+  screening: label_screening_10pct_v1
+  noncompliance: label_noncompliance_v1
+
+target_rules:
+  screening_ratio_operator: ">"
+  screening_ratio_threshold: 0.1
+  note: 비율 0.1은 음성 0이며 현재 라벨과 100% 일치
+
+group_keys:
+  primary: duplicate_group_id
+  fallback:
+    - source_system
+    - source_receipt_id
+    - source_sample_id
+  never_use_as_features: true
+
+core_features:
+  - product_code
+  - product_name_std
+  - product_group_raw
+  - origin_country_code
+  - origin_country_name
+  - import_country_code
+  - production_country_code
+  - collection_province
+  - collection_city
+  - cultivation_province
+  - cultivation_city
+  - work_type
+  - collection_stage
+  - cultivation_method_1
+  - cultivation_method_2
+  - facility_type
+  - survey_area
+  - survey_volume
+  - export_type
+
+calendar_features:
+  source: event_date
+  derived:
+    - event_year
+    - event_month
+    - event_quarter
+    - season
+  raw_date_is_split_only: true
+
+conditional_features:
+  - request_date
+  - receipt_date
+  - collection_date
+  - manufacture_date
+  - distribution_date
+  - shipment_expected_date
+  - analysis_type
+
+diagnostic_only:
+  - source_system
+  - source_dataset
+  - canonical_source_name
+  - source_membership
+  - analysis_agency
+  - request_agency
+  - importer_name
+  - manufacturer_name
+
+post_outcome_forbidden:
+  - analysis_date
+  - completion_date
+  - judge_result
+  - judge_confidence
+  - result_raw
+  - result_value_numeric
+  - result_value_numeric_enriched
+  - result_unit
+  - compliance_raw
+  - exceedance_flag
+  - judge_note
+  - result_to_mrl_ratio
+  - judge_result_source
+  - judge_result_db
+  - ready_data_judge_result
+  - import_db_source_result_raw
+  - import_db_source_test_result
+  - import_db_judge_result_raw
+  - import_db_result_numeric
+
+mrl_policy:
+  current_master_columns_allowed: false
+  reason: 현재 원장 값이 라벨 생성 및 사후 보강 이력과 결합
+  allowed_rebuild: 검사일 기준 외부 규정표에서 독립적으로 재구축
+
+split_policy:
+  random_row_split_allowed: false
+  time_based_split_required: true
+  keep_group_in_single_split: true
+  fit_category_and_missing_rules_on_train_only: true
