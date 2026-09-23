@@ -1,0 +1,1 @@
+"""LSTM sequence feasibility diagnostics."""
