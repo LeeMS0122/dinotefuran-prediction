@@ -1,0 +1,46 @@
+# 개인 설정과 원천자료
+.env
+.env.*
+!.env.example
+data/
+*.csv
+!results/final_model_test_metrics.csv
+!train/resources/tuning_experiment_registry.csv
+*.xlsx
+*.xls
+*.parquet
+*.ndjson
+
+# 실행 결과, 모델, 로그
+output/
+outputs/
+catboost_info/
+mlruns/
+mlartifacts/
+*.db
+*.pkl
+*.joblib
+*.pt
+*.pth
+*.cbm
+*.log
+*.err
+
+# 생성 미리보기와 노트북
+*.ipynb
+*.html
+*.png
+*.pdf
+*.pptx
+
+# 런타임·편집기
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+node_modules/
+.artifact_workbook/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
