@@ -1,0 +1,46 @@
+version: official_baseline_core_v1
+random_seed: 42
+
+population:
+  train: "2015-2024"
+  validation: "2025"
+  test: "2026-01-01~2026-06-30 (locked; not scored)"
+  unit: "target-specific label-confirmed record"
+  comparison_rule: "same validation record_id set within each target"
+
+features:
+  feature_set: core
+  external_variables_used: false
+
+evaluation:
+  split: validation
+  sample_weight: group_sample_weight
+  primary_metric: recall
+  threshold_metric: f2
+  threshold_beta: 2.0
+  top_k_fractions: [0.05, 0.10, 0.20]
+
+models:
+  - model_type: logistic
+    display_name: Logistic Regression
+  - model_type: catboost
+    display_name: CatBoost
+  - model_type: lightgbm
+    display_name: LightGBM
+  - model_type: xgboost
+    display_name: XGBoost
+  - model_type: LSTM
+    display_name: LSTM
+
+lstm:
+  reuse_existing_validation_predictions: true
+  selected_windows:
+    occurrence: 90
+    screening: 30
+    noncompliance: 30
+  source_version: lstm_window_tuning_v1
+
+test_lock:
+  score_test: false
+  save_test_predictions: false
+  select_model_on_test: false
