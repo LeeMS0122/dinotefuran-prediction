@@ -1,0 +1,63 @@
+version: lstm_baseline_v1
+seed: 42
+targets: [occurrence, screening, noncompliance]
+splits:
+  train: train
+  validation: validation
+  test: test
+sequence:
+  window_days: 30
+  input_channels: 2
+  count_transform: log1p
+static_features:
+  categorical:
+    - source_system
+    - food_group_l1_std
+    - food_group_l2_std
+    - origin_region_std
+    - domestic_macro_region
+    - supply_route_v1
+    - event_season
+  numeric:
+    - event_month_sin
+    - event_month_cos
+    - event_dayofyear_sin
+    - event_dayofyear_cos
+    - weather_join_ready_v1
+  masks:
+    - key_valid
+    - date_valid
+architecture:
+  hidden_size: 32
+  num_layers: 1
+  bidirectional: false
+  embedding_max_dim: 16
+  mlp_hidden_size: 64
+  dropout: 0.20
+training:
+  batch_size: 512
+  max_epochs: 30
+  early_stopping_patience: 5
+  early_stopping_min_delta: 0.0001
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  gradient_clip_norm: 1.0
+  num_workers: 0
+  loss: weighted_bce_with_logits
+selection:
+  model_epoch_metric: validation_weighted_pr_auc
+  threshold_metric: validation_weighted_f2
+  beta: 2.0
+evaluation:
+  top_k_percent: [1, 5, 10, 20]
+  test_usage: evaluate_once_after_validation_selection
+policy:
+  tune_all_models: true
+  models:
+    - Logistic Regression
+    - CatBoost
+    - LightGBM
+    - XGBoost
+    - LSTM
+  baseline_rank_does_not_exclude_tuning: true
+
