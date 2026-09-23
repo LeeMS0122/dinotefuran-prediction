@@ -1,0 +1,76 @@
+version: tuning_v2_weather
+seed: 42
+
+scope:
+  target: screening
+  champion:
+    config_id: CFG-018
+    run_id: CFG-018-T0034
+    model: catboost
+    feature_set: conditional
+  purpose: paired_weather_challenger
+
+splits:
+  train:
+    start_year: 2015
+    end_year: 2024
+  validation:
+    start_year: 2025
+    end_year: 2025
+  allowed_for_development: [train, validation]
+  shared_test:
+    start_date: 2026-01-01
+    end_date: 2026-06-30
+    use_only_after_candidate_lock: true
+    label: reused_common_benchmark
+
+inputs:
+  features: output/features_v1/screening_features_v1.parquet
+  weather_v2: output/tuning_v2_weather/weather_data/screening_weather_features_v1.parquet
+  weather_fallback: output/external_variables_v1/weather_pilot/screening_weather_features_v1.parquet
+  weather_builder: external_variables/pilot_weather_join.py
+  search_spaces: tuning/search_spaces.yaml
+
+weather:
+  windows: [14, 30, 60, 90]
+  minimum_coverage_pct: 70.0
+  numeric_base_fields:
+    - temp_mean
+    - hghst_artmp_mean
+    - lowst_artmp_mean
+    - hum_mean
+    - wind_mean
+    - max_wind_mean
+    - rn_sum
+    - srqty_mean
+  required_lineage_column_pattern: wx_max_observed_date_{window}d
+
+experiment:
+  models: [catboost, lightgbm, xgboost]
+  internal_feature_set: conditional
+  variants: [internal_only, internal_plus_weather]
+  common_population_across_windows: true
+  trials_per_configuration: 40
+  bootstrap_repeats: 500
+  bootstrap_confidence: 0.95
+  threshold_metric: weighted_f2
+  threshold_beta: 2.0
+
+selection:
+  primary_metric: recall
+  minimum_recall_improvement_abs: 0.03
+  require_recall_ci_low_above_zero: true
+  minimum_f2_delta_abs: -0.01
+  minimum_average_precision_delta_abs: -0.01
+  minimum_top10_capture_delta_abs: 0.0
+  lock_single_challenger_before_shared_test: true
+
+output:
+  root: output/tuning_v2_weather
+  preserve_tuning_v1: true
+  test_data_used_for_development: false
+
+regeneration:
+  password_environment_variable: TOXIN_DB_PASSWORD
+  output_dir: output/tuning_v2_weather/weather_data
+  docs_dir: docs/외부변수_연결/tuning_v2_weather
