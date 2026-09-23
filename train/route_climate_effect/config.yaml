@@ -1,0 +1,56 @@
+version: route_climate_effect_v1
+seed: 42
+test_data_used: false
+
+comparison:
+  cohort: high
+  variants: [internal_only, internal_plus_climate]
+  threshold_metric: validation_weighted_f2
+  threshold_beta: 2.0
+  top_k_percent: [5, 10, 20]
+  bootstrap_repeats: 200
+  bootstrap_confidence: 0.95
+  guardrail_absolute_tolerance: 0.01
+  models: [logistic, catboost, lightgbm, xgboost, lstm]
+
+domestic_weather_base_fields:
+  - temp_mean
+  - hghst_artmp_mean
+  - lowst_artmp_mean
+  - hum_mean
+  - wind_mean
+  - max_wind_mean
+  - rn_sum
+  - srqty_mean
+
+import_climate_fields:
+  - clim_t2m_c
+  - clim_t2m_max_c
+  - clim_t2m_min_c
+  - clim_rh2m_pct
+  - clim_precip_mm_day
+  - clim_solar_mj_m2_day
+
+minimum_weather_coverage_pct: 70.0
+
+lstm:
+  selected_window_manifest: output/weather_window_tuning_v1/manifest.json
+  sequence_root: output/lstm_window_tuning_v1/sequences
+  masks: [key_valid, date_valid]
+  architecture:
+    hidden_size: 32
+    num_layers: 1
+    bidirectional: false
+    embedding_max_dim: 16
+    mlp_hidden_size: 64
+    dropout: 0.20
+  training:
+    batch_size: 1024
+    max_epochs: 30
+    early_stopping_patience: 5
+    early_stopping_min_delta: 0.0001
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    gradient_clip_norm: 1.0
+    num_workers: 0
+
