@@ -1,0 +1,18 @@
+version: lstm_window_tuning_v1
+windows: [14, 30, 60, 90]
+targets: [occurrence, screening, noncompliance]
+seed: 42
+selection:
+  primary_metric: weighted_recall
+  f1_relative_floor: 0.95
+  tie_breakers:
+    - weighted_f1
+    - weighted_pr_auc
+  threshold_metric: validation_weighted_f2
+evaluation:
+  selection_split: validation
+  test_data_used: false
+comparison:
+  other_models_source: docs/LSTM_베이스라인/table/all_five_model_best_baseline.csv
+  status: interim
+  caution: LSTM window만 1차 최적화된 상태이므로 최종 모델 우열로 해석하지 않음
